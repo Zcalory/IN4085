@@ -10,5 +10,5 @@ function show_images(digits, samples)
   end
 
   images = prnist(digits, samples);
-  figure; show(data);
+  figure; show(images);
 end
