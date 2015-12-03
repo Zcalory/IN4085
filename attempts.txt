@@ -1,0 +1,4 @@
+@gianluca:
+-fourier transform doesnt look helpful
+-it would be nice to have class priors.. 
+-neural networks are a waste of time
