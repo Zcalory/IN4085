@@ -8,7 +8,7 @@ function images = loadRaw(digits, samples)
   % samples: which samples out of 1000 available do you want to show (default [1:40:1000])
 
   if nargin == 0
-    images = prnist;
+    images = prnist([0:9], [1:40:1000]);
   elseif nargin==2
     images = prnist(digits, samples);
   end
