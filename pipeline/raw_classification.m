@@ -1,19 +1,22 @@
-raw = loadDataset();
+raw = loadDataset(); %load dataset
 
-classifier = bpxnc([],[10 10 10 10 10 10 10 10 10 10 10 10 10 10 10],5000);
-training_samples = 100; %samples per class
+classifier = knn([],1);
+training_samples = 100; %number of samples per class
 
-[train, test] = gendat(raw, training_samples*ones(1,10)); clear raw;
+%generate training/test set by having balanced classes
+[train, test] = gendat(raw, training_samples*ones(1,10)); clear raw; 
 
-w = train*classifier*classc;
+w = train*classifier*classc; %train the classifier
 
-classification = test*w;
+classification = test*w; %test the classifier on the test set
 
-lab = classification*labeld;
+lab = classification*labeld; %get the 'predicted' labeling 
 
-[e,c] = testc(classification);
+[e,c] = testc(classification); %performance of the classifier
 
-cmat = confmat( getlab(test), lab );
+cmat = confmat( getlab(test), lab ); %compute confusion matrix
+
+%save a struct in the workspace, ready to be saved in a file
 
 gimme_a_name = struct();
 
