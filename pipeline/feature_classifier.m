@@ -2,23 +2,23 @@ clc; close all;
 
 %% Getting dataset
 %Option 1: Load from folder
-%data_feat =load('../dataset/feat_data.mat');
-%data_feat=data_feat.data_feat;
+data_feat =load('../dataset/feat_data_1.mat');
+data_feat=data_feat.data_feat;
 
 %Option 2:Create new dataset
- data = getDataset();
+ %data = getDataset();
 
 %% Extrating features
-data_feat=im_features(data, 'all');
+%data_feat=im_features(data, 'all'); %Saved under feat_data_1.mat
 %getfeatlab % retrives the labels of features
 
 
-data_zer=im_moments(data, 'zer', 6);
-data_hu=im_moments(data, 'hu');
+%data_zer=im_moments(data, 'zer', 6);
+%data_hu=im_moments(data, 'hu');
 % data_feat=[data_feat moments_zer moments_hu];
 % size(data_feat)
 % 
-% save('../dataset/feat_data.mat','data_feat')
+%save('../dataset/feat_data_1.mat','data_feat')
 
 %adaboost takes a classifier and checks missclassification
 %The idea about using features is that the images have a lot of data,
@@ -83,14 +83,20 @@ M=size(data_feat)
 
 % Resize the data set choosing the optimal number of features given by
 % clevalf - 16 features
+[trn, tst]=gendat(data_feat,0.8);
+size(trn)
+size(tst)
 
-selfeat=round(linspace(1,M(1,2),16)) % generates a linearly spaced vector with the 16 indices for feature selection
-[traindata,]=seldat(data_feat,[] ,1:16,{1:20,1:20,1:20,1:20,1:20,1:20,1:20,1:20,1:20,1:20} ); % Resized dataset with optimal number of features for training
-[testdata,]=seldat(data_feat,[] ,1:16,{21:25,21:25,21:25,21:25,21:25,21:25,21:25,21:25,21:25,21:25} ); % Resized dataset with optimal number of features for testing
-Mr=size(rdata)
-labels=getfeatlab(data_feat,1)
-size(labels)
-labels(selfeat)
+[Wb,Rb]=featselb(a,'maha-s',16);
+Wb = setname(Wb,'featf maha-s'); 
+disp(+Wb)
+% selfeat=round(linspace(1,M(1,2),16)) % generates a linearly spaced vector with the 16 indices for feature selection
+% [trn,]=seldat(data_feat,[] ,1:16 ); % Resized dataset with optimal number of features for training
+% [tst,]=seldat(data_feat,[] ,1:16); % Resized dataset with optimal number of features for testing
+% Mr=size(rdata)
+% labels=getfeatlab(data_feat,1)
+% size(labels)
+% labels(selfeat)
 
 %% Classifiers
 %for knn dimensionality is not a problem because 
@@ -102,9 +108,11 @@ wqdc=qdc([]);
 wfisher=fisherc([]);
 wlogl=loglc([]);
 
-[W]=traindata*{wnmc,wldc,wqdc,wlogl,wfisher,wknn,wparzen };
+[W]=trn*{wnmc,wldc,wqdc,wlogl,wfisher,wknn,wparzen };
 
-Er=testdata*W*testc() 
+Er=tst*W*testc() 
+
+
 
 %Traindata with 20 objects of 25
 %Test data with 5 objects of 25
@@ -117,11 +125,22 @@ Er=testdata*W*testc()
 %Erros using traindata for both training and testing
 %0.6700    0.2650    0.0350    0.1500    0.3200    0.4300    0.6400
 
-%Using the first 16 features - so only
+%Using the first 16 features - so only from im_features
 %Errors using traindata for training and testdata for testing
 % NMC      LDC        QDC      Logl       Fisher      Knn    Parzen
 %0.7000    0.2200    0.3800    0.3000    0.2600    0.6000    0.6400
 
 
+%Traindata with 200 objects and testdatawith 50
+%Only 16 features from im_features (no concatenation done)
+%Error  using traindata for training and testdata for testing:
+% NMC      LDC        QDC      Logl       Fisher      Knn    Parzen
+%0.6240    0.1280    0.0360    0.1040    0.1720         0    0.5320
+
+% Selecting 16 features using backwards search algorithem
+%Only 16 features from im_features (no concatenation done)
+%Error  using traindata for training and testdata for testing:
+% NMC      LDC        QDC      Logl       Fisher      Knn    Parzen
+% 0.5200    0.1600    0.4600    0.7400    0.2000    0.4800    0.6200
 
 
