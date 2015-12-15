@@ -1,6 +1,6 @@
 function [gimme_a_name] = raw_classification(dataset)
 
-classifier = knnc([],1);
+classifier = svc;
 training_samples = 100; %number of samples per class
 
 for i=1:10

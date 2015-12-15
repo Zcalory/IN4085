@@ -1,7 +1,7 @@
-function [gimme_a_name] = raw_classification(dataset)
+function [gimme_a_name] = raw_kernelization(dataset)
 
 classifier = fisherc;
-kernel_type = proxm([], 'r', 30);
+kernel_type = proxm([], 'r', 5000);
 lambda = 0;
 
 training_samples = 150; %number of samples per class
