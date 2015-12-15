@@ -2,3 +2,7 @@
 -fourier transform doesnt look helpful
 -it would be nice to have class priors.. 
 -neural networks are a waste of time
+-ldc, gaussian kernel sigma=30, mean_err = 5.32%, var_err = 0.22
+-fisher, gaussian, sigma=23, mean_err=3.78, var_err = 1;
+-fisher, smoothed, gaussian, '23', mean_err=3.2, var_err = 0.003
+-fisher, smoothed, gaussian, '30', mean_err=2.2, var_err = 0.005
