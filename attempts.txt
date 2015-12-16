@@ -17,5 +17,6 @@ SIFT (on smoothed set) [~,sift] = vl_dsift(img, 'size', 8, 'Step', 5);
 -parzenc 4%
 -svc 3.8%
 -fisherc, gaussian 5000, mean_err=1.4%, var=0.003
-
+-fisherc, gaussian 10k, err=1%
+-fisherc, gaussian 15k, err=1.2%
 
