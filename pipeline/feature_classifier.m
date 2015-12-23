@@ -32,7 +32,43 @@ data_feat=data_feat.data_feat;
 %% Feature dimension
 
 eval_feat_dim(data_feat)
+%% Parametric classifiers
+wnmc=nmc([]);
+wldc=ldc([]);
+wqdc=qdc([]);
+wfisher=fisherc([]);
+wlogl=loglc([]);
 
+
+% Checking feature dimensionality with clevalf
+feat_vec=1:5:size(data(1,:));
+lf_qdc=clevalf(data,wqdc,feat_vec, 0.8, 100); 
+lf_ldc=clevalf(data,wldc,feat_vec, 0.8, 100);
+lf_nmc=clevalf(data,wnmc,feat_vec, 0.8, 100);
+lf_fisher=clevalf(data,wfisher,feat_vec, 0.8, 100);
+lf_logl=clevalf(data,wlogl,feat_vec, 0.8, 100);
+% 
+% 
+figure()
+plote({lf_qdc, lf_ldc, lf_nmc, lf_fisher, lf_logl})
+
+title('Parametric Classifiers')
+legend({'QDC', 'LDC', 'NMC', 'Fisher', 'Logl'})
+
+
+
+% Non parametric classifiers
+wknn=knnc([]);
+wparzen=parzenc([]);
+
+
+lf_knn=clevalf(data,wknn,feat_vec, 0.8, 100); 
+lf_parzen=clevalf(data,wparzen,feat_vec, 0.8, 100);
+% 
+figure()
+plote({lf_knn, lf_parzen})
+title('Non Parametric Classifiers')
+legend({'Knn', 'Parzen'})
 %An idea from one of the assistances was to use a loop to randomize the
 %features selected, we can use the indices of the random vector to find
 %witch features were used (but I didn't understand how to implement this).
@@ -116,4 +152,6 @@ Er=(tst*Wb)*W*testc()
 
 classification = (tst*Wb)*wldc;
 lab = classification*labeld;
-cmat = confmat( getlab(test), lab );
+cmat = confmat( getlab(tst), lab );
+
+prnist

@@ -8,9 +8,10 @@ wqdc=qdc([]);
 wfisher=fisherc([]);
 wlogl=loglc([]);
 
+N=size(data);
 
 % Checking feature dimensionality with clevalf
-feat_vec=1:5:size(data(1,:));
+feat_vec=1:5:N(1,2);
 lf_qdc=clevalf(data,wqdc,feat_vec, 0.8, 100); 
 lf_ldc=clevalf(data,wldc,feat_vec, 0.8, 100);
 lf_nmc=clevalf(data,wnmc,feat_vec, 0.8, 100);
