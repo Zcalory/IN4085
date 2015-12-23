@@ -20,7 +20,7 @@ data_feat=data_feat.data_feat;
 %data_feat=extract_feat(data)
 
 % 
-%save(strcat('../dataset/feat_data_',int2str(N(1,2)),'.mat'),'data_feat')
+save(strcat('../dataset/feat_data_',int2str(N(1,2)),'.mat'),'data_feat')
 % this dosent commit if the 
 %adaboost takes a classifier and checks missclassification
 %The idea about using features is that the images have a lot of data,
@@ -31,7 +31,7 @@ data_feat=data_feat.data_feat;
 
 %% Feature dimension
 
-eval_feat_dim(data_feat)
+%eval_feat_dim(data_feat)
 
 %An idea from one of the assistances was to use a loop to randomize the
 %features selected, we can use the indices of the random vector to find
@@ -107,13 +107,10 @@ Er=(tst*Wb)*W*testc()
 % 0.5200    0.1600    0.4600    0.7400    0.2000    0.4800    0.6200
 
 % selecting 16 features using forwards search algorithm
-% From 389 features using extract_feat
-%Error  using traindata for training and testdata for testing:
-% NMC      LDC        QDC      Logl       Fisher      Knn    Parzen
-%0.6025    0.1550    0.1175    0.1075    0.1725    0.5300    0.5500
+
 
 %% Confusion matrix on best performing classifier
 
-classification = (tst*Wb)*wldc;
-lab = classification*labeld;
-cmat = confmat( getlab(test), lab );
+%classification = test*wldc;
+%lab = classification*labeld;
+%cmat = confmat( getlab(test), lab );
