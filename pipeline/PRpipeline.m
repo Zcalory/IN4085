@@ -27,10 +27,11 @@ if pca_ ~= 0
 end
 
 training_samples = 150; %number of samples per class
+repetitions = 1;
 
 disp('');
 
-for i=1:5
+for i=1:repetitions
     disp( ['REP #' num2str(i) ] );
     
     %generate a balanced training/test set
@@ -81,6 +82,7 @@ end
 
 stat = struct();
 
+stat.w = w;
 stat.e = e;
 stat.c = c;
 stat.cmat = cmat;
