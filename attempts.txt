@@ -7,7 +7,7 @@ RAW
 -ldc, gaussian kernel sigma=30, mean_err = 5.32%, var_err = 0.22
 -fisher, gaussian, sigma=23, mean_err=3.78, var_err = 1;
 
-SMOOTHED
+SMOOTHED ( imgaussfilt(getPixels(raw,1,1), .6 ); )
 -fisher, gaussian, '23', mean_err=3.2, var_err = 0.003
 -fisher, gaussian, '30', mean_err=2.2, var_err = 0.005
 -fisher, gaussian, '100', PCA=0.9, err=5.2%, 

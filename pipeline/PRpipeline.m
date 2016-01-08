@@ -26,8 +26,8 @@ if pca_ ~= 0
     pca = scalem([],'variance')*pcam([],pca_);
 end
 
-training_samples = 150; %number of samples per class
-repetitions = 1;
+training_samples = 10; %number of samples per class
+repetitions = 5;
 
 disp('');
 
@@ -74,7 +74,7 @@ for i=1:repetitions
     disp(['Test error: ' num2str( e(i)*100 ) '%' ]);
     disp('Misclassifications per class');
     disp(c(i,:));
-    cmat(i,:,:) = confmat( getlab(test), lab );
+    %cmat(i,:,:) = confmat( getlab(test), lab );
 end
     
 
@@ -83,9 +83,9 @@ end
 stat = struct();
 
 stat.w = w;
+stat.k = kernel;
 stat.e = e;
 stat.c = c;
-stat.cmat = cmat;
 stat.mean = mean(e)*100;
 stat.var = var(e);
 

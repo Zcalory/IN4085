@@ -6,6 +6,11 @@ function sifted = getSIFT(set)
     sifted = prdataset();
     
     for i=1:classes
+        
+        tmp = seldat(set,i);
+        img_per_class = tmp.objsize;
+        clear tmp;
+        
         for j=1:img_per_class
 
             disp(['PROCESSING IMAGE: ' num2str(j)]);
