@@ -7,20 +7,27 @@ clc; close all;
 %  functions of prtools
 
 %Option 1: Load from folder
-data_feat =load('../dataset/feat_data_389.mat');
+
+data_feat =load('../dataset/feat_data_new389.mat');
 data_feat=data_feat.data_feat;
 
+%data_feat =load('../dataset/smoothed.mat');
+%data_feat=data_feat.smoothed;
+
+%stat=PRpipeline(data_feat,0.9, 30000,qdc)
+% gives a 13% error
+
 %Option 2:Create new dataset
- %data =loadDataset();
+data_feat =loadDataset('r');
 
 %% Extrating features
 
 %getfeatlab % retrives the labels of features
 
-%data_feat=extract_feat(data)
-
+%data_feat=extract_feat(data_feat);
+%N=size(data_feat);
 % 
-%save(strcat('../dataset/feat_data_',int2str(N(1,2)),'.mat'),'data_feat')
+%save(strcat('../dataset/feat_data_new',int2str(N(1,2)),'.mat'),'data_feat')
 % this dosent commit if the 
 %adaboost takes a classifier and checks missclassification
 %The idea about using features is that the images have a lot of data,
@@ -31,69 +38,11 @@ data_feat=data_feat.data_feat;
 
 %% Feature dimension
 
-eval_feat_dim(data_feat)
-%% Parametric classifiers
-wnmc=nmc([]);
-wldc=ldc([]);
-wqdc=qdc([]);
-wfisher=fisherc([]);
-wlogl=loglc([]);
-
-
-% Checking feature dimensionality with clevalf
-feat_vec=1:5:size(data(1,:));
-lf_qdc=clevalf(data,wqdc,feat_vec, 0.8, 100); 
-lf_ldc=clevalf(data,wldc,feat_vec, 0.8, 100);
-lf_nmc=clevalf(data,wnmc,feat_vec, 0.8, 100);
-lf_fisher=clevalf(data,wfisher,feat_vec, 0.8, 100);
-lf_logl=clevalf(data,wlogl,feat_vec, 0.8, 100);
-% 
-% 
-figure()
-plote({lf_qdc, lf_ldc, lf_nmc, lf_fisher, lf_logl})
-
-title('Parametric Classifiers')
-legend({'QDC', 'LDC', 'NMC', 'Fisher', 'Logl'})
+%eval_feat_dim(data_feat)
 
 
 
-% Non parametric classifiers
-wknn=knnc([]);
-wparzen=parzenc([]);
 
-
-lf_knn=clevalf(data,wknn,feat_vec, 0.8, 100); 
-lf_parzen=clevalf(data,wparzen,feat_vec, 0.8, 100);
-% 
-figure()
-plote({lf_knn, lf_parzen})
-title('Non Parametric Classifiers')
-legend({'Knn', 'Parzen'})
-%An idea from one of the assistances was to use a loop to randomize the
-%features selected, we can use the indices of the random vector to find
-%witch features were used (but I didn't understand how to implement this).
-
-%% Feature selection
-% Resize the data set choosing the optimal number of features given by
-% clevalf - 16 features when using 
-[trn, tst]=gendat(data_feat,0.8);
-size(trn)
-size(tst)
-
-%
-[Wb,Rb]=featself(trn,'maha-s',16);
-%featsellr is to computational intensive
-%featselb dosent perform well on high dimensional space
-
-Wb = setname(Wb,'featf maha-s'); 
-disp(+Wb)
-% selfeat=round(linspace(1,M(1,2),16)) % generates a linearly spaced vector with the 16 indices for feature selection
-% [trn,]=seldat(data_feat,[] ,1:16 ); % Resized dataset with optimal number of features for training
-% [tst,]=seldat(data_feat,[] ,1:16); % Resized dataset with optimal number of features for testing
-% Mr=size(rdata)
-% labels=getfeatlab(data_feat,1)
-% size(labels)
-% labels(selfeat)
 
 %% Classifiers
 %for knn dimensionality is not a problem because 
@@ -107,10 +56,28 @@ wlogl=loglc([]);
 wknn=knnc([]);
 wparzen=parzenc([]);
 
+%% Feature selection
+% Resize the data set choosing the optimal number of features given by
+% clevalf - 21 features when using 
 
+
+%featsellr is to computational intensive
+%featselb dosent perform well on high dimensional space
+
+
+[trn, tst]=gendat(data_feat,0.8);
+
+[Wb,Rb]=featself(trn,ldc,101);
 [W]=trn*Wb*{wnmc,wldc,wqdc,wlogl,wfisher,wknn,wparzen};
 
-Er=(tst*Wb)*W*testc() 
+E=(tst*Wb)*W*testc();
+
+
+
+fprintf('Error table \n')
+fprintf('NMC        LDC           QDC         Logl          Fisher         Knn       Parzen \n')
+disp(num2str(E))
+%Make a loop over W to calculate the covariance matrix
 
 
 %Traindata with 20 objects of 25
@@ -147,11 +114,32 @@ Er=(tst*Wb)*W*testc()
 %Error  using traindata for training and testdata for testing:
 % NMC      LDC        QDC      Logl       Fisher      Knn    Parzen
 %0.6025    0.1550    0.1175    0.1075    0.1725    0.5300    0.5500
+%0.6475    0.1475    0.0925    0.1350    0.1775    0.5275    0.5925
+%0.6000    0.1275    0.0650    0.1225    0.1600    0.5300    0.5375
+%0.64      0.1415     0.1      0.1485    0.1935    0.5635    0.5785 ->average of 5 trys
+
+% Corrected extracted features extract_feat
+% NMC        LDC           QDC         Logl        Fisher     Knn        Parzen 
+% 0.595      0.1325        0.69        0.65        0.16       0.485      0.5375
+
+% applying gianlucas script of pca and kearnalizing gives an error of 13%
+% stat=PRpipeline(data_feat,0.9, 30000,qdc)
 
 %% Confusion matrix on best performing classifier
 
-classification = (tst*Wb)*wldc;
+classification = (tst*Wb)*W(2);
 lab = classification*labeld;
 cmat = confmat( getlab(tst), lab );
 
-prnist
+
+
+%% Garbage
+
+% selfeat=round(linspace(1,M(1,2),16)) % generates a linearly spaced vector with the 16 indices for feature selection
+% [trn,]=seldat(data_feat,[] ,1:16 ); % Resized dataset with optimal number of features for training
+% [tst,]=seldat(data_feat,[] ,1:16); % Resized dataset with optimal number of features for testing
+% Mr=size(rdata)
+% labels=getfeatlab(data_feat,1)
+% size(labels)
+% labels(selfeat)
+

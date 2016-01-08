@@ -35,7 +35,7 @@ for i=1:repetitions
     disp( ['REP #' num2str(i) ] );
     
     %generate a balanced training/test set
-    [train, test] = gendat(dataset_, training_samples*ones(1,10));
+    [train, test] = gendat(dataset_, 0.75);
     
     if pca_ ~= 0
         disp('PCA time'); tic;
