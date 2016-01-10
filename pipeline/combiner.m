@@ -23,7 +23,7 @@ function [ w_comb ] = combiner(W_, tst_)
   W= [w1; w2; w3; w4;w5];
   E=zeros(1,5);
   for i=1:5
-      E(i)=tst_*W(i)*testc();
+      E(i)=tst_*W(i)*testc()
   end
     who
   [val_min, i_min]=min(E);

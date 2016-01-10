@@ -18,7 +18,7 @@ data_feat=data_feat.data_feat;
 % gives a 13% error
 
 %Option 2:Create new dataset
-data_feat =loadDataset('r');
+%data_feat =loadDataset('r');
 
 %% Extrating features
 
@@ -38,7 +38,7 @@ data_feat =loadDataset('r');
 
 %% Feature dimension
 
-%eval_feat_dim(data_feat)
+eval_feat_dim(data_feat)
 
 
 
@@ -64,10 +64,13 @@ wparzen=parzenc([]);
 %featsellr is to computational intensive
 %featselb dosent perform well on high dimensional space
 
+%[Wb,Rb]=featself(data_feat,ldc,101);
+Wb=pcam(data_feat, 101);
+data_feat=data_feat*Wb;
 
 [trn, tst]=gendat(data_feat,0.8);
 
-[Wb,Rb]=featself(trn,ldc,101);
+
 [W]=trn*Wb*{wnmc,wldc,wqdc,wlogl,wfisher,wknn,wparzen};
 
 E=(tst*Wb)*W*testc();
