@@ -1,6 +1,5 @@
 function [ ] = visualizeDissimMat( d )
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
+%VISUALIZEDISSIMMAT Show dissimilarity space as an image and dataset in 2D
 
 figure;
 imagesc(+d);
