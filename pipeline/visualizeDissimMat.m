@@ -1,6 +1,7 @@
 function [ ] = visualizeDissimMat( d )
 %VISUALIZEDISSIMMAT Show dissimilarity space as an image and dataset in 2D
 
+% Visualize the data using various methods - good for the report
 figure;
 imagesc(+d);
 title('Dissimilarity data as an image')
