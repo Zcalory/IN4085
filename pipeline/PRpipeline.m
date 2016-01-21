@@ -27,7 +27,7 @@ if pca_ ~= 0
 end
 
 training_samples = 10; %number of samples per class
-repetitions = 5;
+repetitions = 10;
 
 disp('');
 
@@ -35,7 +35,7 @@ for i=1:repetitions
     disp( ['REP #' num2str(i) ] );
     
     %generate a balanced training/test set
-    [train, test] = gendat(dataset_, 0.75);
+    [train, test] = gendat(dataset_, repmat(training_samples,1,10));
     
     if pca_ ~= 0
         disp('PCA time'); tic;
@@ -54,7 +54,11 @@ for i=1:repetitions
 
         train = train*kernel + lambda*eye(size(train,1));
         test = test*kernel;
+        
         toc; fprintf('\n');
+        
+        disp('Kernelized:');
+        train
     end
     
     disp('Training time'); tic

@@ -21,7 +21,7 @@ function gsnist = getDataset()
         
         disp(['Processing image: ' id]);
         
-        img = im2set(fullfile('Dataset',file.name),'NOVERBOSE');
+        img = im2set(fullfile('Dataset',file.name),'nv');
         
         drawnow;
         
@@ -45,7 +45,7 @@ function gsnist = getDataset()
     
     dioporco = [2,3,4,9,0,5,7,8,1,6];
 
-    for i=1:classes
+    for i=1:10
         
         tmp = seldat(gsnist,i);
         tmp = setlabels(tmp, repmat( ['digit_' num2str(dioporco(i))], tmp.objsize, 1 ) );

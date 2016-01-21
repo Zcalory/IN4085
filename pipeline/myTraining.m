@@ -1,4 +1,4 @@
-function w = myTraining(dataset, fraction)
+edit function w = myTraining(dataset, fraction)
     
     if fraction == 1
         train = dataset;
