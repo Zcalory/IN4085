@@ -20,12 +20,13 @@ function [ w_comb ] = combiner(W_, tst_)
   w4=W_*medianc; % median combining algorithm
   w5=W_*votec; % vote combining algorithm
 
-  W= [w1; w2; w3; w4;w5];
-  E=zeros(1,5);
+  W= {w1, w2, w3, w4, w5};
+  %E=zeros(1,5);
+  
   for i=1:5
       E(i)=tst_*W(i)*testc()
   end
-    who
+    
   [val_min, i_min]=min(E);
   w_comb=W(i_min)
   

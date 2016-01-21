@@ -8,7 +8,8 @@ clc; close all;
 
 %Option 1: Load from folder
 
-data_feat =load('../dataset/feat_data_new389.mat');
+data_feat =load('../dataset/feat_data_new101.mat'); % already computed feature selection
+%data_feat =load('../dataset/feat_data_new389.mat');
 data_feat=data_feat.data_feat;
 
 %data_feat =load('../dataset/smoothed.mat');
@@ -38,7 +39,7 @@ data_feat=data_feat.data_feat;
 
 %% Feature dimension
 
-eval_feat_dim(data_feat)
+%eval_feat_dim(data_feat)
 
 
 
@@ -65,15 +66,15 @@ wparzen=parzenc([]);
 %featselb dosent perform well on high dimensional space
 
 %[Wb,Rb]=featself(data_feat,ldc,101);
-Wb=pcam(data_feat, 101);
-data_feat=data_feat*Wb;
+%Wb=pcam(data_feat, 101);
+%data_feat=data_feat*Wb;
 
-[trn, tst]=gendat(data_feat,0.8);
+[trn, tst]=gendat(data_feat,0.8)
 
 
-[W]=trn*Wb*{wnmc,wldc,wqdc,wlogl,wfisher,wknn,wparzen};
+[W]=trn*{wnmc,wldc,wqdc,wlogl,wfisher,wknn,wparzen};
 
-E=(tst*Wb)*W*testc();
+E=tst*W*testc();
 
 
 
@@ -125,12 +126,16 @@ disp(num2str(E))
 % NMC        LDC           QDC         Logl        Fisher     Knn        Parzen 
 % 0.595      0.1325        0.69        0.65        0.16       0.485      0.5375
 
+%Using pcam and 101 features
+%NMC        LDC           QDC         Logl          Fisher         Knn       Parzen 
+%0.5975        0.13       0.275      0.7275       0.155      0.5175       0.535
+
 % applying gianlucas script of pca and kearnalizing gives an error of 13%
 % stat=PRpipeline(data_feat,0.9, 30000,qdc)
 
 %% Confusion matrix on best performing classifier
 
-classification = (tst*Wb)*W(2);
+classification = (tst)*W(2);
 lab = classification*labeld;
 cmat = confmat( getlab(tst), lab );
 
